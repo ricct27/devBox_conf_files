@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kube-dns
-  namespace: kube-system
-data:
-  upstreamNameservers: | # 3 Nameservers Maximums ["192.168.1.1","8.8.8.8"]

@@ -4,5 +4,4 @@ metadata:
   name: kube-dns
   namespace: kube-system
 data:
-  upstreamNameservers: | # 2 Nameservers Maximum
-  ["8.8.8.8","8.8.4.4"]
+  upstreamNameservers: | # 3 Nameservers Maximums ["192.168.1.1"]

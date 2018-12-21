@@ -21,13 +21,9 @@ sudo apt-get install openssh-server
 ### Follow the script docker_install 
 ### If Nvidia-docker is installed then follow the script for the Nvidia_doocker_install
 
-
-
 ############### Master Nodes: ###################################################################
 
 ### Delete old things
-sudo kubeadm reset
-sudo rm -r $HOME/.kube/
 
 ### Add the official GPG keys.
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -64,17 +60,15 @@ sudo systemctl status kubelet
 sudo journalctl -xeu kubelet
 
 
-    # Start your cluster.   --apiserver-advertise-address
-    # sudo kubeadm init --apiserver-advertise-address=192.168.1.81 --ignore-preflight-errors=all --config /etc/kubeadm/config.yml
-    # sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.1.81 --kubernetes-version stable-1.10.11 --ignore-preflight-errors=all
-     sudo kubeadm init --ignore-preflight-errors=all --config /etc/kubeadm/config.yml
+### Start your cluster.
+#sudo kubeadm init --apiserver-advertise-address=192.168.1.81 --ignore-preflight-errors=all --config /etc/kubeadm/config.yml
+#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.1.81 --kubernetes-version stable-1.10.11 --ignore-preflight-errors=all
+sudo kubeadm init --ignore-preflight-errors=all --config /etc/kubeadm/config.yml
 
-    
-
+### Run as normal User no Root
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
 
 # For errors with cgroup compatibility between k8 and docker chance
 nano /etc/docker/daemon.json
@@ -132,8 +126,11 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
  ########## Reset K8 ########################################################
 
-  kubeadm reset
-  rmdir $HOME/.kube
+kubectl drain <node name> --delete-local-data --force --ignore-daemonsets
+kubectl delete node <node name>
+kubeadm reset
+iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+sudo rm -r $HOME/.kube/
 
 
 
