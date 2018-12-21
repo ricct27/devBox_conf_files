@@ -1,5 +1,5 @@
 ## Uninstall Docker
-sudo apt-get remove docker docker-engine docker.io
+sudo apt-get remove docker docker-engine docker.io docker-ce
 sudo apt-get purge docker-ce
 sudo rm -rf /var/lib/docker
 
@@ -24,10 +24,14 @@ sudo add-apt-repository \
 ## Install docker.
 sudo apt-get update && apt-get install docker-ce=18.06.0~ce~3-0~ubuntu
 
+### To prevent future (auto) updates
+apt-mark hold docker-ce
+
+
 # Setup daemon.
 sudo cat > /etc/docker/daemon.json <<EOF
 {
-  "exec-opts": ["native.cgroupdriver=systemd"],
+  "exec-opts": ["native.cgroupdriver=cgroupfs"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "100m"

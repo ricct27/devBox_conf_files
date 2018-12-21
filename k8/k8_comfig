@@ -1,77 +1,67 @@
-https://www.youtube.com/watch?v=UWg3ORRRF60
+### https://www.youtube.com/watch?v=UWg3ORRRF60
+### https://docs.nvidia.com/datacenter/kubernetes-install-guide/index.html
 
 
-# disable Swap
-    swapoff -a
+### Disable Swap
+sudo swapoff -a
 
-# comment the swap line
-    nano /etc/fstab
+### Comment the swap line
+sudo nano /etc/fstab
 
-#set the hostnames
-    nano /etc/hostname
+### Set the hostnames
+sudo nano /etc/hostname
 
-# associate hostname with the static IP
-    nano /etc/hosts
+### Associate hostname with the static IP
+sudo nano /etc/hosts
 
-# install openSSH server
-    apt-get install openssh-server
+### Install openSSH server
+sudo apt-get install openssh-server
 
-#Install Docker https://kubernetes.io/docs/setup/cri/ , not the last one because not supported
-    sudo apt-get remove docker docker-engine docker.io
-    sudo rm -fr /var/lib/docker/
-    sudo apt-get update
-    sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository \
-       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-       $(lsb_release -cs) \
-       stable"
-    sudo apt-get update
-    sudo apt-get install docker-ce
-    sudo groupadd docker
-    sudo usermod -aG docker $USERg
-    docker run hello-world
+### Install Docker https://kubernetes.io/docs/setup/cri/ , not the last one because not supported
+### Follow the script docker_install 
+### If Nvidia-docker is installed then follow the script for the Nvidia_doocker_install
 
 
 
+############### Master Nodes: ###################################################################
 
-Master Nodes:###################################################################
-    #Add the official GPG keys.
+### Delete old things
+sudo kubeadm reset
+sudo rm -r $HOME/.kube/
 
-       curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-       curl -s -L https://nvidia.github.io/kubernetes/gpgkey | sudo apt-key add -
-       curl -s -L https://nvidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
-             sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
+### Add the official GPG keys.
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+curl -s -L https://nvidia.github.io/kubernetes/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
+sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
 
-       sudo apt update
+sudo apt update
 
-    #Install packages.
-
-         VERSION=1.10.11+nvidia
-         sudo apt install -y kubectl=${VERSION} kubelet=${VERSION} \
-                                     kubeadm=${VERSION} helm=${VERSION}
-         apt-mark hold kubelet kubeadm kubectl
-
-
-    # check docker cgroup
-    docker info |grep -i cgroup
+###Install packages.
+VERSION=1.10.11+nvidia
+sudo apt install -y kubectl=${VERSION} kubelet=${VERSION} \
+     kubeadm=${VERSION} helm=${VERSION}
+apt-mark hold kubelet kubeadm kubectl
 
 
+### check docker cgroup
+docker info |grep -i cgroup
 
-    # edit file
-    nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
-    Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
-    #Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
-    #Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
-    systemctl status kubelet
-    systemctl daemon-reload
-    systemctl restart kubelet
-    systemctl status kubelet
+
+
+### Edit file for configurin the cgroup of kubelet
+# https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/
+nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
+Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
+#Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+#Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+sudo systemctl status kubelet
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+sudo systemctl status kubelet
+
+sudo journalctl -xeu kubelet
 
 
     # Start your cluster.   --apiserver-advertise-address
@@ -79,17 +69,27 @@ Master Nodes:###################################################################
     # sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.1.81 --kubernetes-version stable-1.10.11 --ignore-preflight-errors=all
      sudo kubeadm init --ignore-preflight-errors=all --config /etc/kubeadm/config.yml
 
-    # For errors with cgroup compatibility between k8 and docker chance
-    /etc/docker/daemon.json
+    
 
-    # Checking Cluster Health
-    kubectl get all --all-namespaces
-
-    # To retrieve the token the joining token
-    sudo kubeadm token create --print-join-command
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
-Worker Nodes ###################################################################
+# For errors with cgroup compatibility between k8 and docker chance
+nano /etc/docker/daemon.json
+
+# Checking Cluster Health
+kubectl get all --all-namespaces
+kubectl get nodes
+
+
+
+# To retrieve the token the joining token
+sudo kubeadm token create --print-join-command
+
+
+################################ Worker Nodes ##########################################################
 
   # check Nvidia-Docker  https://github.com/NVIDIA/nvidia-docker
   # Add the following
@@ -110,6 +110,21 @@ Worker Nodes ###################################################################
 
  # Join the worker node to the cluster with a command similar to the following
  <join-token>  --ignore-preflight-errors=all
+
+### In case of Swap and Cgroup erros edit the file
+# https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/
+nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
+Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
+#Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+#Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+systemctl status kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+systemctl status kubelet
+
+sudo apt-mark hold kubelet kubeadm kubectl
+
 
  kubectl describe nodes
  kubectl get nodes

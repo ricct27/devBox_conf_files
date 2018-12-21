@@ -44,9 +44,9 @@ method=manual
 
 ## 1. Delete old things
 
-Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#tear-down
+## Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#tear-down
 
-On the master:
+## On the master:
 	kubectl drain k8scl-worker1 --delete-local-data --force --ignore-daemonsets
 	kubectl delete node k8scl-worker1
         kubectl drain k8scl-worker2 --delete-local-data --force --ignore-daemonsets
@@ -54,17 +54,17 @@ On the master:
         kubectl drain k8scl-worker3 --delete-local-data --force --ignore-daemonsets
         kubectl delete node k8scl-worker3
 
-On worker1, 2 and 3:
-	sudo kubeadm reset
+## On worker1, 2 and 3:
+sudo kubeadm reset
 
-After that on the master:
-	sudo kubeadm reset
-	sudo rm -r $HOME/.kube/
+## After that on the master:
+sudo kubeadm reset
+sudo rm -r $HOME/.kube/
 
 ## 2. Neu installieren
 
-Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#initializing-your-master
-und https://blog.alexellis.io/kubernetes-in-10-minutes/
+## Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#initializing-your-master
+## und https://blog.alexellis.io/kubernetes-in-10-minutes/
 
 Run the following command on the master (for cube version 1.9):
 	sudo kubeadm init/
@@ -86,22 +86,22 @@ To start using your cluster, you need to run (as a regular user):
 
 ## 3. Pod-Netzwerk
 
-Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network
+## Siehe https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network
 
-This point classically makes the most difficulties. At first, we have had some pretty good experiences with flannel, but not since version 1.9. We then tried Romana.
+## This point classically makes the most difficulties. At first, we have had some pretty good experiences with flannel, but not since version ## 1.9. We then tried Romana.
 
-Please refer https://github.com/romana/romana/tree/master/containerize#using-kubeadm
+## Please refer https://github.com/romana/romana/tree/master/containerize#using-kubeadm
 
-Back on the master:
+## Back on the master:
 	kubectl apply -f https://raw.githubusercontent.com/romana/romana/master/containerize/specs/romana-kubeadm.yml
 
-In case of unexpected behavior or in general, it is always good to delete the old configurations under /etc/cni/net.d/.
+## In case of unexpected behavior or in general, it is always good to delete the old configurations under /etc/cni/net.d/.
 
 ## 4. Add Nodes
 
-Please refer https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#44-joining-your-nodes
+## Please refer https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#44-joining-your-nodes
 
-Use SSH to go to workers 1, 2 and 3 and enter the following command:
+## Use SSH to go to workers 1, 2 and 3 and enter the following command:
 	sudo kubeadm join/
 	 	--token <token> <master-ip>:<master-port>/
 	  --discovery-token-ca-cert-hash sha256:<hash>
