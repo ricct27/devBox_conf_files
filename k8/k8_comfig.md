@@ -29,7 +29,7 @@ sudo apt-get install openssh-server
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 curl -s -L https://nvidia.github.io/kubernetes/gpgkey | sudo apt-key add -
 curl -s -L https://nvidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
-sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
+	sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
 
 sudo apt update
 
@@ -37,7 +37,7 @@ sudo apt update
 VERSION=1.10.11+nvidia
 sudo apt install -y kubectl=${VERSION} kubelet=${VERSION} \
      kubeadm=${VERSION} helm=${VERSION}
-apt-mark hold kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
 
 
 ### check docker cgroup
@@ -128,8 +128,8 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 kubectl drain <node name> --delete-local-data --force --ignore-daemonsets
 kubectl delete node <node name>
-kubeadm reset
-iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+sudo kubeadm reset
+sudo iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 sudo rm -r $HOME/.kube/
 
 

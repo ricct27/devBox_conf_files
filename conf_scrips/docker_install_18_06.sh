@@ -25,7 +25,7 @@ sudo add-apt-repository \
 sudo apt-get update && apt-get install docker-ce=18.06.0~ce~3-0~ubuntu
 
 ### To prevent future (auto) updates
-apt-mark hold docker-ce
+sudo apt-mark hold docker-ce
 
 
 # Setup daemon.
