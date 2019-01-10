@@ -28,7 +28,7 @@ sudo apt-get update && apt-get install docker-ce=18.06.0~ce~3-0~ubuntu
 sudo apt-mark hold docker-ce
 
 
-# Setup daemon.
+# Setup daemon. This is overriten when istalling the nvidia-docker
 sudo cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=cgroupfs"],
@@ -45,7 +45,29 @@ sudo mkdir -p /etc/systemd/system/docker.service.d
 # Restart docker.
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+sudo systemctl status docker
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
 docker run hello-world
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
