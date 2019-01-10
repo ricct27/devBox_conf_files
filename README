@@ -1,5 +1,7 @@
 My new project
 
+$ git clone https://github.com/libgit2/libgit2
+
 $ git status
 $ git diff
 
@@ -7,9 +9,19 @@ $ git add *.c
 $ git add LICENSE
 $ git commit -m 'initial project version'
 
+$ git push
 
-git clone git@github.com:ricct27/Ip_forwarding.git
+##########################################################################
 
+1) Use the WIFI connection for configuring (downloading large files) the DevBoxs
+
+2) Install Docker version 18.06,use file docker-install...
+
+3) Install Cuda and nvidia-docker only on the workers, use file docker-cuda...
+
+4) Change the Network configuration based on the tipology desired
+
+5) Install Kubernetes in the correct network interface
 
 
 
