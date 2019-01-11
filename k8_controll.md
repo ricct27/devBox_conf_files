@@ -1,10 +1,14 @@
 # https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 # Launch a single instance:
-
+```
 kubectl run nginx --image=nginx:1.10.0
+```
 
 # Get pods
+```
 kubectl get pods
+```
+
 
 # Expose nginx
 kubectl expose deployment nginx --port 80 --type LoadBalancer
