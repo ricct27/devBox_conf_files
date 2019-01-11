@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 ## Verify the driver version
 ```console
 nvidia-smi
