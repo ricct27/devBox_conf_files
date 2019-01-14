@@ -1,6 +1,6 @@
 ( https://kubernetes.io/docs/reference/kubectl/cheatsheet/ )
 ## Launch a single instance:
-```
+```console
 kubectl run nginx --image=nginx:1.10.0
 ```
 
