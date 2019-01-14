@@ -32,6 +32,20 @@ kubectl label pods <pod-name> "<pod-label>"
 
 ## Deployments 
 Deployments are a declarative way to say what goes where
+The run command creates a deployment based on the parameters specified, such as the image or replicas. Kubectl run_ is similar to docker run but at a cluster level.
+The format of the command is 
+```console
+kubectl run <name of deployment> <properties>
+kubectl get deployments
+kubeclt describe deployments <dep-name>
+```
+With the deployment created, we can use kubectl to create a service which exposes the Pods on a particular port.
+```console
+kubectl expose deployment http --external-ip="172.17.0.36" --port=8000 --target-port=80
+curl http://172.17.0.36:8000
+´´´
+
+
 
 ## Config File
 
