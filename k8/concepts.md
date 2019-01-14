@@ -32,7 +32,7 @@ kubectl label pods <pod-name> "<pod-label>"
 
 ## Deployments 
 Deployments are a declarative way to say what goes where
-The run command creates a deployment based on the parameters specified, such as the image or replicas. Kubectl run_ is similar to docker run but at a cluster level.
+The *run* command creates a deployment based on the parameters specified, such as the image or replicas. Kubectl *run* is similar to docker *run* but at a cluster level.
 The format of the command is 
 ```console
 kubectl run <name of deployment> <properties>
