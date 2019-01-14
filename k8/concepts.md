@@ -43,7 +43,7 @@ With the deployment created, we can use kubectl to create a service which expose
 ```console
 kubectl expose deployment http --external-ip="172.17.0.36" --port=8000 --target-port=80
 curl http://172.17.0.36:8000
-´´´
+```
 
 
 
