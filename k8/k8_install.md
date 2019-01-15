@@ -172,34 +172,59 @@ sudo kubeadm token create --print-join-command
  <join-token>  --ignore-preflight-errors=all
 
 
-### In case of Swap and Cgroup erros edit the file
-# https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/
+In case of Swap and Cgroup erros edit the file https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/
+```console
 sudo nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+```
+
+Possibil entries
+```console
 ####Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
 Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
 ####Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
 Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+```
+
+Check the k8 status
+```console
 sudo systemctl status kubelet
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 sudo systemctl status kubelet
 sudo kubeadm reset
 sudo systemctl start kubelet
+```
 
-
-
+Check the Nodes and GPUs
+```console
 kubectl describe nodes
 kubectl get nodes
 kubectl describe nodes | grep -B 3 gpu
+```
 
-
-########## Reset K8 ########################################################
-
+# Tear down K8 
+```console
 kubectl drain k8- --delete-local-data --force --ignore-daemonsets
 kubectl delete node k8-
 sudo kubeadm reset
 sudo iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 sudo rm -r $HOME/.kube/
+```
+
+# Controlling your cluster from machines other than the master
+```console
+scp root@<master ip>:/etc/kubernetes/admin.conf .
+kubectl --kubeconfig ./admin.conf get node
+```
+
+
+# Proxying API Server to localhost
+```console
+scp root@<master ip>:/etc/kubernetes/admin.conf .
+kubectl --kubeconfig ./admin.conf proxy
+```
+
+You can now access the API Server locally at http://localhost:8001/api/v1
 
 
 
@@ -242,6 +267,3 @@ sudo rm -r $HOME/.kube/
 
 
 
-
-
-######################################################
