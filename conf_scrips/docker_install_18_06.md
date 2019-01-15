@@ -1,11 +1,13 @@
-## Uninstall Docker
+# Install Docker 18.06
+
+Remove previous versions
 ```console
 sudo apt-get remove docker docker-engine docker.io docker-ce
 sudo apt-get purge docker-ce
 sudo rm -rf /var/lib/docker
 ```
 
-## Install prerequisites.
+Install prerequisites.
 ```console
 sudo apt-get update
 
@@ -16,12 +18,12 @@ sudo apt-get install \
     software-properties-common
 ```
 
-## Download GPG key.
+Download GPG key.
 ```console
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 ```
 
-## Add docker apt repository.
+Add docker apt repository.
 ```console
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -29,17 +31,17 @@ sudo add-apt-repository \
    stable"
 ```
 
-## Install docker.
+Install docker.
 ```console
 sudo apt-get update && apt-get install docker-ce=18.06.0~ce~3-0~ubuntu
 ```
 
-### To prevent future (auto) updates
+To prevent future (auto) updates
 ```console
 sudo apt-mark hold docker-ce
 ```
 
-# Setup daemon. This is overriten when istalling the nvidia-docker
+Setup daemon. This is overriten when istalling the nvidia-docker
 ```console
 sudo cat > /etc/docker/daemon.json <<EOF
 {
@@ -55,7 +57,7 @@ EOF
 sudo mkdir -p /etc/systemd/system/docker.service.d
 ```
 
-## Restart docker.
+Restart docker.
 ```console
 sudo systemctl daemon-reload
 
