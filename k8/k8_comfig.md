@@ -82,10 +82,12 @@ sudo nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 ```
 
 Possibile entries
+```console
 Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
 Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
 Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
 Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+```
 
 Check the status af Kubernetes
 ```console
@@ -98,7 +100,7 @@ rmdir $HOME/.kube
 sudo systemctl start kubelet
 ```
 
-# check for Kubelet errors
+Check for Kubelet errors
 ```console
 sudo journalctl -xeu kubelet
 ```
