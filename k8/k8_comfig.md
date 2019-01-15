@@ -15,7 +15,7 @@ https://docs.nvidia.com/datacenter/kubernetes-install-guide/index.html
 # Set on all nodes
 
 Set up Kubectl Autocomplete https://kubernetes.io/docs/reference/kubectl/cheatsheet/
-´´´console
+```console
 source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 ```
@@ -43,11 +43,7 @@ Install openSSH server
 ```console
 sudo apt-get install openssh-server
 ```
-
-Install Docker https://kubernetes.io/docs/setup/cri/ , not the last one because not supported
-Follow the script docker_install 
-
-# ------------- Master Nodes ----------------------------------
+# Master Nodes
 
 Delete old things
 
@@ -59,7 +55,7 @@ curl -s -L https://nvidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.lis
 	sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
 	
 sudo apt update
-```console
+```
 
 Install packages.
 ```console
