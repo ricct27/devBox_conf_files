@@ -134,7 +134,7 @@ To retrieve the joining token
 sudo kubeadm token create --print-join-command
 ```
 
-# -------------------Worker Nodes---------------------------------
+# Worker Nodes
 
 Check that SWAP and host names
 check Nvidia-Docker  https://github.com/NVIDIA/nvidia-docker
