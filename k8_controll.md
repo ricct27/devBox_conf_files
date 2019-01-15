@@ -1,23 +1,45 @@
 ( https://kubernetes.io/docs/reference/kubectl/cheatsheet/ )
+```console
+
+```
+## Create, Expose and scale
+1. Create a deployment
+```console
+kubectl run http --image=katacoda/docker-http-server:latest --replicas=1
+kubectl get deployments
+kubectl describe deployment http
+```
+2. Expose externaly with IP:port : should point in one of the nodes
+```console
+kubectl expose deployment http --external-ip="172.17.0.15" --port=8000 --target-port=80
+kubectl get services
+curl http://172.17.0.15:8000
+```
+  2.1 Expose directly
+```console
+  kubectl run httpexposed --image=katacoda/docker-http-server:latest --replicas=1 --port=80 --hostport=8001
+```
+
+3. Scale
+```console
+kubectl scale --replicas=3 deployment http
+kubectl get pods
+kubeclt describe svc http
+curl http://172.17.0.15:8000   # check the differen IDs for the load balancing
+```
+
+
+
+
+
+
 ## Launch a single instance:
 ```console
 kubectl run nginx --image=nginx:1.10.0
 ```
-
-## Get pods
-```console      
-kubectl get pods
-```
-
-
 ## Expose nginx
 ```console
 kubectl expose deployment nginx --port 80 --type LoadBalancer
-```
-
-## List services
-```console
-kubectl get services
 ```
 
 ## Get commands with basic output
