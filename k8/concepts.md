@@ -1,4 +1,7 @@
-## Services
+# Pods
+ A pod is a collection of containers that makes up a particular application, for example Redis.
+
+# Services
 https://classroom.udacity.com/courses/ud615/lessons/7824962412/concepts/81883227220923
 
 ###### Servicess are ersistent Endpoints for Pods:
@@ -30,7 +33,7 @@ Add different labels to a Pod
 kubectl label pods <pod-name> "<pod-label>"
 ```
 
-## Deployments 
+# Deployments 
 Deployments are a declarative way to say what goes where
 The *run* command creates a deployment based on the parameters specified, such as the image or replicas. Kubectl *run* is similar to docker *run* but at a cluster level.
 The format of the command is 
@@ -47,5 +50,50 @@ curl http://172.17.0.36:8000
 
 
 
-## Config File
+## Deploing an app 
+https://www.katacoda.com/courses/kubernetes/guestbook
+
+The first stage of launching the application is to start the App Master. A Kubernetes service deployment has, at least, two parts:
+  - replication controller 
+  - service
+
+The replication controller defines how many instances should be running, the Docker Image to use, and a name to identify the service. Additional options can be utilized for configuration and discovery. Use the editor above to view the YAML definition.
+If app were to go down, the replication controller would restart it on an active node.
+
+
+1. Create the Master Replication Controller
+ The replication controller defines:
+   - how many instances should be running
+   - the Docker Image to use
+   - a name to identify the service. 
+
+   Additional options can be utilized for configuration and discovery. If the app were to go down, the replication controller would restart it on an active node.
+
+```console
+kubectl create -f redis-master-controller.yaml
+kubectl get rc
+kubectl get pods
+```
+
+2. Create the Master Service (Internal Load Balancer)
+ A Kubernetes *Service* is a named *load balancer* that proxies traffic to one or more containers. The proxy works even if the containers are on different nodes. Services proxy communicate within the cluster and rarely expose ports to an outside interface.
+The recommended approach is to have a LoadBalancer service to handle external communications.
+
+
+```console
+kubectl create -f redis-master-service.yaml
+kubectl get services
+kubectl describe services redis-master
+```
+
+
+
+
+
+
+
+
+
+
+
 
