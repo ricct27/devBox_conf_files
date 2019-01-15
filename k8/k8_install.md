@@ -14,12 +14,6 @@ https://docs.nvidia.com/datacenter/kubernetes-install-guide/index.html
 
 # Set on all nodes
 
-Set up Kubectl Autocomplete https://kubernetes.io/docs/reference/kubectl/cheatsheet/
-```console
-source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
-echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
-```
-
 Disable Swap
 ```console
 sudo swapoff -a
@@ -142,35 +136,45 @@ sudo kubeadm token create --print-join-command
 
 # -------------------Worker Nodes---------------------------------
 
-# Check that SWAP and host names
-# check Nvidia-Docker  https://github.com/NVIDIA/nvidia-docker
+Check that SWAP and host names
+check Nvidia-Docker  https://github.com/NVIDIA/nvidia-docker
 
-# Add the following
+Add theollowing
+```conse
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 curl -s -L https://nvidia.github.io/kubernetes/gpgkey | sudo apt-key add -
-curl -s -L https://nvidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
+curl -s -L https://vidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
       sudo tee /etc/apt/sources.list.d/nvidia-kubernetes.list
 
 sudo apt update
+```
 
-# Install packages
+Install packages
+```console
 VERSION=1.10.11+nvidia 
-
 sudo apt install -y kubectl=${VERSION} kubelet=${VERSION} \
       kubeadm=${VERSION} helm=${VERSION}
+```
 
+```console
 sudo apt-mark hold kubelet kubeadm kubectl
+```
 
-#To Verify if Kubernetes (kubelet, kubectl, and kubeadm) is Installed Properly
+Verify if Kubernetes (kubelet, kubectl, and kubeadm) is Installed Properly
+```console
 dpkg -l '*kube*'| grep +nvidia
 $ls /etc/kubeadm
+```
 
-# Retrieve joining token from the Master
+Retrieve joining token from the Master
+```console
 sudo kubeadm token create --print-join-command
+```
 
-# Join the worker node to the cluster with a command similar to the following
+Join the worker node to the cluster with a command similar to the following
+ ```console
  <join-token>  --ignore-preflight-errors=all
-
+```
 
 In case of Swap and Cgroup erros edit the file https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/
 ```console
@@ -227,8 +231,12 @@ kubectl --kubeconfig ./admin.conf proxy
 You can now access the API Server locally at http://localhost:8001/api/v1
 
 
-
-
+# Set up Kubectl Autocomplete 
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+```console
+source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+```
 
 
 
