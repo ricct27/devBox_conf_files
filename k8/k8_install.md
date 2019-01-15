@@ -139,8 +139,8 @@ sudo kubeadm token create --print-join-command
 Check that SWAP and host names
 check Nvidia-Docker  https://github.com/NVIDIA/nvidia-docker
 
-Add theollowing
-```conse
+Add the following
+```consele
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 curl -s -L https://nvidia.github.io/kubernetes/gpgkey | sudo apt-key add -
 curl -s -L https://vidia.github.io/kubernetes/ubuntu16.04/nvidia-kubernetes.list |\
