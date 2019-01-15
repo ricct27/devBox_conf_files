@@ -2,7 +2,7 @@
 ```console
 
 ```
-## Create, Expose and scale
+## Create, Expose and Scale
 1. Create a deployment
 ```console
 kubectl run http --image=katacoda/docker-http-server:latest --replicas=1
@@ -27,6 +27,29 @@ kubectl get pods
 kubeclt describe svc http
 curl http://172.17.0.15:8000   # check the differen IDs for the load balancing
 ```
+
+## Deploy, Scale using YAML
+1. Create a deployment
+```console
+kubectl create -f deployment.yaml
+kubectl get doployment
+kubectl describe deployment <dep-name>
+```
+2. Create a Service (svc)
+```console
+kubectl create -f service.yaml
+kubectl get svc
+kubeclt describe svc webapp1-svc
+curl node:30080
+```
+3. Scale. Modify the YAML file based on the requirement
+```console
+kubectl apply -f deployment.yaml
+kubectl get deployment
+kubectl get pods
+curl host:30080
+```
+
 
 
 
