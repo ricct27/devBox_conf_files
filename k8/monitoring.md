@@ -1,4 +1,4 @@
-## Nvidia Grafana monitoring
+# Nvidia Grafana monitoring
 
 Label the GPU nodes.
 ```console
@@ -29,7 +29,7 @@ kubectl create secret docker-registry nvcr.dgxkey --docker-server=nvcr.io --dock
 kubectl create -f /etc/kubeadm/examples/resnet.yml
 ```
 
-# Dashbord,Kubernetes cludster web-based UI
+# Dashbord, Kubernetes cludster web-based UI
 https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
 Deploy the dashbord
 ```console
