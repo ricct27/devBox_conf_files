@@ -1,4 +1,7 @@
-## Verify the driver version
+# Install CUDA Nvidia Drivers
+
+
+Verify the driver version
 ```console
 nvidia-smi
 
@@ -8,7 +11,7 @@ nvcc -V
 ```
 
 
-## Install CUDA Nvidia Drivers
+Install CUDA 
 ```console
 sudo update-pciids
 
@@ -35,7 +38,7 @@ echo "export PATH=/usr/local/cuda-10.0/bin${PATH:+:${PATH}}" >> ~/.bashrc
 echo "export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64 ${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> ~/.bashrc
 ```
 
-## Verify the driver version
+Verify the driver version
 ```console
 nvidia-smi
 
@@ -44,24 +47,27 @@ cat /proc/driver/nvidia/version
 nvcc -V
 ```
 
-# Install the cuda version
+Test drivers
 ```console
 cuda-install-samples-10.0.sh
 ```
 
-### Update Systembackba	
+Update Systembackba	
 ```console
 systemback-cli
 ```
 
 
-# Nvidia-Docker2
-## If you have nvidia-docker2 installed: we need to remove it and all existing GPU containers
+# Install Nvidia-Docker2
+Remove privios versions
 ```console
 sudo docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
 
 sudo apt-get purge -y nvidia-docker2
+```
 
+Add repository
+```console
 sudo curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
   sudo apt-key add -
 
@@ -75,7 +81,7 @@ sudo apt-get update
 
 
 
-## Docker version compatible with kubernetes "apt-cache madison nvidia-docker2 nvidia-container-runtime"
+Install with Docker version compatible with kubernetes "apt-cache madison nvidia-docker2 nvidia-container-runtime"
 ```console
 sudo apt-get install -y nvidia-docker2=2.0.3+docker18.06.0-1 nvidia-container-runtime=2.0.0+docker18.06.0-1
 
@@ -88,17 +94,17 @@ sudo usermod -aG docker $USER
 docker --version
 ```
 
-## Test nvidia-smi with the latest official CUDA image
+Test nvidia-smi with the latest official CUDA image
 ```console
 sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
 ```
 
-## check docker cgroup
+Check docker cgroup
 ```console
 docker info |grep -i cgroup
 ```
 
-## Update insertig the conf for Kubernetes
+Update insertig the conf for Kubernetes
 ```console
 sudo nano /etc/docker/daemon.json 
 {
@@ -113,7 +119,7 @@ sudo nano /etc/docker/daemon.json
 sudo mkdir -p /etc/systemd/system/docker.service.d
 ```
 
-## Restart docker.
+Restart docker.
 ```console
 sudo systemctl daemon-reload
 sudo systemctl restart docker
@@ -121,7 +127,7 @@ sudo systemctl restart docker
 sudo apt-mark hold docker-ce nvidia-docker2 nvidia-container-runtime
 ```
 
-## Test nvidia-smi with the latest official CUDA image
+Test nvidia-smi with the latest official CUDA image
 ```console
 docker run hello-world
 sudo docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
