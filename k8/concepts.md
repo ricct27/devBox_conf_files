@@ -1,10 +1,3 @@
-# Namespaces
-Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called namespaces.
-Namespaces are intended for use in environments with many users spread across multiple teams, or projects. For clusters with a few to tens of users, you should not need to create or think about namespaces at all. Start using namespaces when you need the features they provide. 
-Namespaces are a way to divide cluster resources between multiple users (via resource quota).
-
-It is not necessary to use multiple namespaces just to separate slightly different resources, such as different versions of the same software: use labels to distinguish resources within the same namespace.
-
 # Pods
  A pod is a collection of containers that makes up a particular application, for example Redis.
 
@@ -59,10 +52,11 @@ curl http://172.17.0.36:8000
 
 ## Deploing an app 
 https://www.katacoda.com/courses/kubernetes/guestbook
+In this example we'll be running Redis App where the Slaves  will have replicated data from the master. More details of Redis replication can be found a https://redis.io/topics/replication
 
 The first stage of launching the application is to start the App Master. A Kubernetes service deployment has, at least, two parts:
   - replication controller 
-  - service
+  - service (load balancer)
 
 The replication controller defines how many instances should be running, the Docker Image to use, and a name to identify the service. Additional options can be utilized for configuration and discovery. Use the editor above to view the YAML definition.
 If app were to go down, the replication controller would restart it on an active node.
@@ -93,9 +87,21 @@ kubectl get services
 kubectl describe services redis-master
 ```
 
+3. Start a Redis Slave controller
+In this case, we'll be launching two instances of the pod using the image kubernetes/redis-slave:v2. It will link to redis-master via DNS.
+In this example we need to determine how the service discovers the other pods. The YAML represents the GET_HOSTS_FROM property as DNS.
 
-
-
+```console
+kubectl create -f redis-slave-controller.yaml
+kubectl get rc
+```
+4. Slave Service (Load balancer)
+We need to make our staves accessible to incoming requests. This is done by creating a service which knows how to communicate with the other slaves. 
+In our case, we have two replicated pods and the service will also provide load balancing between the two nodes.
+```console
+kubectl create -f redis-slave-service.yaml
+kubectl get svc
+```
 
 
 
