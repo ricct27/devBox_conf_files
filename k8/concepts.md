@@ -53,6 +53,7 @@ curl http://172.17.0.36:8000
 ## Deploing an app 
 https://www.katacoda.com/courses/kubernetes/guestbook
 In this example we'll be running Redis App where the Slaves  will have replicated data from the master. More details of Redis replication can be found a https://redis.io/topics/replication
+The PHP code uses HTTP and JSON to communicate with Redis. When setting a value requests go to Redis-Master while read data comes from the redis-slave nodes.
 
 The first stage of launching the application is to start the App Master. A Kubernetes service deployment has, at least, two parts:
   - replication controller 
@@ -102,6 +103,47 @@ In our case, we have two replicated pods and the service will also provide load 
 kubectl create -f redis-slave-service.yaml
 kubectl get svc
 ```
+5. Deploying the FrontEnd app
+ The pattern of deploying a web application is the same as the pods we've deployed before.
+The YAML defines a service called frontend that uses the image _gcr.io/googlesamples/gb-frontend:v3. The replication controller will ensure that three pods will always exist.
+
+```console
+kubectl create -f frontend-controller.yaml
+kubectl get rc
+```
+
+The PHP code uses HTTP and JSON to communicate with Redis. When setting a value requests go to redis-master while read data comes from the redis-slave nodes.
+
+6. FronteEnd Service
+To make the frontend accessible we need to start a service to configure the proxy.
+Start Proxy:
+The YAML defines the service as a NodePort. NodePort allows you to set well-known ports that are shared across your entire cluster. This is like -p 80:80 in Docker.
+In this case, we define our web app is running on port 80 but we'll expose the service on 30080.
+
+```console
+kubectl create -f frontend-service.yaml
+kubectl get svc
+```
+7. Access GuestBook Frontend app
+With all controllers and services defined Kubernetes will start launching them as Pods. A pod can have different states depending on what's happening. For example, if the Docker Image is still being downloaded then the Pod will have a pending state as it's not able to launch. Once ready the status will change to running.
+```console
+kubectl get pods
+```
+
+If we didn't assign a port to NodePort then k8 will assign an available port rundomly. We can find the assigned NodePort using 
+
+```console
+kubectl describe service frontend | grep NodePort
+```
+
+
+
+
+
+
+
+
+
 
 
 
