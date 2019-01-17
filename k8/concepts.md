@@ -184,8 +184,12 @@ Another approach to make a service available outside the cluster is via External
  ```
  
 ## Load Balancer
+When a service requests a Load Balancer, the provider will allocate one from the 10.10.0.0/26 range defined in the configuration.
 
+```console
+kubectl apply -f loadbalancer.yaml
 
+```
 
 
 
