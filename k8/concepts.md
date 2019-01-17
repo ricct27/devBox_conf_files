@@ -136,14 +136,54 @@ If we didn't assign a port to NodePort then k8 will assign an available port run
 kubectl describe service frontend | grep NodePort
 ```
 
+# Networking
+Different approcies to how to access the Pods on the K8
 
+## Cluster IP
+When creating a service, an internal IP is associated with the service in the way that other components can use to access the pods, also used for load balanciang. 
 
+```console
+kubectl apply -f clusterip.yaml
+kubectl describe svc/webapp1-clusterip-svc
+curl $cluster_IP:80
+curl 10.110.165.179:80
+```
 
+**Targer Port**
+**Target ports** allows us to separate the port the service is available on from the port the application is listening on. **TargetPort** is the port in which the application is configured to listen on. 
+**Port** is how the application will be accessed from the *outside*.
+The combination between TargetPort and ClusterIp makes a Pod available inside the cluster on a definite port.
 
+```console
+  ports:
+  - port: 8080
+    targetport: 80
+    
+curl $cluster_IP:8080
+curl 10.110.165.179:8080
+```
 
+## NodePort
+While **TargetPort** and **ClusterIP** make it available to inside the cluster, the **NodePort** exposes the service on each **Node**’s IP via the defined static port. 
 
+```console
+kubectl apply -f nodeport.yaml
+kubectl describe svc/webapp1-nodeport-svc
+curl $cluster_IP:80
+curl $NodeIp:80
+```
 
+## External IPs
+Another approach to make a service available outside the cluster is via External IP address.
 
+```console
+  ports:
+  - port: 80
+  externalIPs:
+  - 192.168.1.80
+ ```
+ 
+## Load Balancer
 
 
 
